@@ -1,6 +1,6 @@
 # Utils
 
-TODO: Write a gem description
+Utilities module for ruby with rails.
 
 ## Installation
 
@@ -20,7 +20,50 @@ Or install it yourself as:
 
 ## Usage
 
-TODO: Write usage instructions here
+### Utils::Configuration
+
+```ruby
+require 'utils/configuration'
+include Utils::Configuration
+
+@config = get_config
+```
+
+Return the hash from yaml file (config/config_common.yml, config/config_secret.yml).
+
+#### config/config_common.yml
+
+Please set the not secure value in this file.
+
+#### config/config_secret.yml
+
+Please set the secure value with RAILS_ENV and add this file to .gitignore.
+return the hash which RAILS_ENV's value.
+
+ex) sample config_secret.yml
+
+```
+production:
+  mysql:
+    user_name: hoge
+    password: hoge
+
+development:
+  mysql:
+    user_name: foo
+    password: foo
+
+test:
+  mysql:
+    user_name: bar
+    password: bar
+```
+
+if RAILS_ENV == 'production', return this hash.
+
+```ruby
+{ 'mysql' => { 'user_name' => 'hoge', 'password' => 'hoge' } }
+```
 
 ## Contributing
 

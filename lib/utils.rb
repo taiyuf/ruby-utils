@@ -1,8 +1,7 @@
 # coding: utf-8
 require "utils/version"
-require 'yaml'
-require 'net/ssh'
-require 'net/scp'
+require "utils/configuration"
 
 module Utils
+
 end

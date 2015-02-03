@@ -1,6 +1,5 @@
 require 'spec_helper'
 require 'yaml'
-require 'tempfile'
 require File.expand_path('../../../lib/utils/configuration', __FILE__)
 include Utils::Configuration
 

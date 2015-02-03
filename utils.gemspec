@@ -8,9 +8,9 @@ Gem::Specification.new do |spec|
   spec.version       = Utils::VERSION
   spec.authors       = ["Taiyu Fujii"]
   spec.email         = ["tf.900913@gmail.com"]
-  spec.summary       = %q{}
-  spec.description   = %q{}
-  spec.homepage      = ""
+  spec.summary       = %q{Utilities module for ruby with rails.}
+  spec.description   = %q{Utils::Configuration => simple management tool by yaml.}
+  spec.homepage      = "https://github.com/taiyuf/ruby_utils"
   spec.license       = "MIT"
 
   spec.files         = `git ls-files -z`.split("\x0")
@@ -21,6 +21,4 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency "bundler", "~> 1.7"
   spec.add_development_dependency "rake", "~> 10.0"
   spec.add_development_dependency "rspec"
-  spec.add_development_dependency "net-ssh"
-  spec.add_development_dependency "net-scp"
 end
