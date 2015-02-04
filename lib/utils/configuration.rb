@@ -105,7 +105,7 @@ module Utils
       yaml
     end
 
+    module_function :get_config, :read_yaml, :init_config
   end
 
-  module_function :init_config, :read_yaml, :get_config
 end
