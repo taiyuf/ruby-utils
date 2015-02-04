@@ -23,7 +23,7 @@ Or install it yourself as:
 ### Utils::Configuration
 
 ```ruby
-require 'utils/configuration'
+require 'utils'
 include Utils::Configuration
 
 @config = get_config

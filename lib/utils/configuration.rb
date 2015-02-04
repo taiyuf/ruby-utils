@@ -71,7 +71,7 @@ module Utils
       @@_config
     end
 
-    def self.init_config
+    def init_config
       @@_config = nil
       get_config
     end
@@ -107,5 +107,5 @@ module Utils
 
   end
 
-  # module_function :init_config, :read_yaml, :get_config
+  module_function :init_config, :read_yaml, :get_config
 end
