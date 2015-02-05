@@ -64,8 +64,8 @@ module Utils
       if @@_config.nil?
         common    = read_yaml('config/config_common.yml')
         secret    = read_yaml('config/config_secret.yml')
-        s = secret["#{ENV['RAILS_ENV']}"]
-        @@_config = s ? common.merge(s) : common
+        env       = ENV['RAILS_ENV'] ? ENV['RAILS_ENV'] : 'development'
+        @@_config = secret[env] ? common.merge(secret[env]) : common
       end
 
       @@_config
