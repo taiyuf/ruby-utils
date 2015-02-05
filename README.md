@@ -7,16 +7,8 @@ Utilities module for ruby with rails.
 Add this line to your application's Gemfile:
 
 ```ruby
-gem 'utils'
+gem 'utils',     '~> 0.0.4', github: 'taiyuf/ruby-utils'
 ```
-
-And then execute:
-
-    $ bundle
-
-Or install it yourself as:
-
-    $ gem install utils
 
 ## Usage
 
