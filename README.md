@@ -7,7 +7,7 @@ Utilities module for ruby with rails.
 Add this line to your application's Gemfile:
 
 ```ruby
-gem 'utils',     '~> 0.0.4', github: 'taiyuf/ruby-utils'
+gem 'utils',     '~> 0.0.5', github: 'taiyuf/ruby-utils'
 ```
 
 ## Usage
