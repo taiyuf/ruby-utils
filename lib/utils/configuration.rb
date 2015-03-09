@@ -1,4 +1,5 @@
 require 'yaml'
+require 'hashie'
 #
 #=utils/configuration.rb
 #
@@ -46,8 +47,6 @@ module Utils
 
   module Configuration
 
-    @@_config = nil
-
     #===
     #
     # @param   nil
@@ -61,14 +60,32 @@ module Utils
     #
     def get_config
 
-      if @@_config.nil?
-        common    = read_yaml('config/config_common.yml')
-        secret    = read_yaml('config/config_secret.yml')
-        env       = ENV['RAILS_ENV'] ? ENV['RAILS_ENV'] : 'development'
-        @@_config = secret[env] ? common.merge(secret[env]) : common
+      _init = Proc.new do
+        common = read_yaml('config/config_common.yml')
+        secret = read_yaml('config/config_secret.yml')
+        env    = ENV['RAILS_ENV'] ? ENV['RAILS_ENV'] : 'development'
+        if secret
+          @@_config = secret.has_key?(env) ? common.merge(secret[env]) : common
+        else
+          @@_config = common
+        end
+
+        @@_config = Hashie.symbolize_keys! @@_config
       end
 
-      @@_config
+      begin
+
+        if @@_config.nil?
+          _init.call
+        else
+          @@_config
+        end
+
+      rescue
+        _init.call
+        @@_config
+      end
+
     end
 
     def init_config
@@ -93,13 +110,14 @@ module Utils
         File.exist?(configfile)
       rescue
         Rails.logger.debug("File does not exist!: #{configfile}")
-        raise Exceptions::NotFound
+        return false
       end
 
       begin
         yaml = YAML.load_file(configfile)
       rescue Exception => e
-        raise "Util::Configuration.read_yaml, [#{e.class}]: #{e.message}"
+        Rails.logger.debug("Util::Configuration.read_yaml, [#{e.class}]: #{e.message}")
+        return false
       end
 
       yaml
