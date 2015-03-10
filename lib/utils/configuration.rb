@@ -1,5 +1,6 @@
 require 'yaml'
 require 'hashie'
+require 'logger'
 #
 #=utils/configuration.rb
 #
@@ -104,19 +105,20 @@ module Utils
     # hoge = hash['hoge']
     #
     def read_yaml(file)
+      log        = Logger.new(STDOUT)
       configfile = File.expand_path(file)
 
       begin
         File.exist?(configfile)
       rescue
-        Rails.logger.debug("File does not exist!: #{configfile}")
+        log.error("File does not exist!: #{configfile}")
         return false
       end
 
       begin
         yaml = YAML.load_file(configfile)
       rescue Exception => e
-        Rails.logger.debug("Util::Configuration.read_yaml, [#{e.class}]: #{e.message}")
+        log.error("Util::Configuration.read_yaml, [#{e.class}]: #{e.message}")
         return false
       end
 
