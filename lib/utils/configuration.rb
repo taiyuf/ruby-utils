@@ -111,14 +111,14 @@ module Utils
       begin
         File.exist?(configfile)
       rescue
-        log.error("File does not exist!: #{configfile}")
+        log.warn("File does not exist!: #{configfile}")
         return false
       end
 
       begin
         yaml = YAML.load_file(configfile)
       rescue Exception => e
-        log.error("Util::Configuration.read_yaml, [#{e.class}]: #{e.message}")
+        log.warn("Util::Configuration.read_yaml, [#{e.class}]: #{e.message}")
         return false
       end
 
