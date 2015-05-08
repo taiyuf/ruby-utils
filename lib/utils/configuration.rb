@@ -1,5 +1,4 @@
 require 'yaml'
-require 'hashie'
 require 'logger'
 #
 #=utils/configuration.rb
@@ -48,6 +47,8 @@ module Utils
 
   module Configuration
 
+    LOG_PREFIX = 'Utils::Configuration'
+
     #===
     #
     # @param   nil
@@ -62,16 +63,23 @@ module Utils
     def get_config
 
       _init = Proc.new do
-        common = read_yaml('config/config_common.yml')
-        secret = read_yaml('config/config_secret.yml')
+        common = read_yaml 'config/config_common.yml'
+        secret = read_yaml 'config/config_secret.yml'
         env    = ENV['RAILS_ENV'] ? ENV['RAILS_ENV'] : 'development'
+
         if secret
-          @@_config = secret.has_key?(env) ? common.merge(secret[env]) : common
+          if secret.has_key?(env.to_sym)
+            @@_config = common.merge(secret[env.to_sym])
+          else
+            Logger.new(STDOUT).warn "#{LOG_PREFIX} could not find RAILS_ENV key: #{env.to_sym} "
+            @@_config = common
+          end
+
         else
           @@_config = common
         end
 
-        @@_config = Hashie.symbolize_keys! @@_config
+        @@_config
       end
 
       begin
@@ -84,7 +92,6 @@ module Utils
 
       rescue
         _init.call
-        @@_config
       end
 
     end
@@ -109,20 +116,40 @@ module Utils
       configfile = File.expand_path(file)
 
       begin
-        File.exist?(configfile)
+        File.exist? configfile
       rescue
-        log.warn("File does not exist!: #{configfile}")
+        log.warn "File does not exist!: #{configfile}"
         return false
       end
 
       begin
-        yaml = YAML.load_file(configfile)
+        yaml = YAML.load_file configfile
       rescue Exception => e
-        log.warn("Util::Configuration.read_yaml, [#{e.class}]: #{e.message}")
+        log.warn "#{LOG_PREFIX}.read_yaml, [#{e.class}]: #{e.message}"
         return false
       end
 
-      yaml
+      symbolize yaml
+    end
+
+    private
+
+    def symbolize(hash)
+      begin
+        require 'active_support'
+      rescue LoadError
+
+        begin
+          require 'hashie'
+        rescue LoadError
+          raise "#{LOG_PREFIX}: active_support or hashie are required!"
+        else
+          Hashie.symbolize_keys! hash
+        end
+
+      else
+        hash.deep_symbolize_keys!
+      end
     end
 
     module_function :get_config, :read_yaml, :init_config
