@@ -57,6 +57,32 @@ if RAILS_ENV == 'production', return this hash.
 { 'mysql' => { 'user_name' => 'hoge', 'password' => 'hoge' } }
 ```
 
+### Utils::HttpClient
+
+```ruby
+require 'utils/http_client'
+include HttpClient
+
+# GET
+req = GET url: URL_STRING, headers: HEADERS_HASH, basic_auth: BASIC_AUTH_HASH
+
+# POST
+req = POST url: URL_STRING, headers: HEADERS_HASH, basic_auth: BASIC_AUTH_HASH
+
+# PUT
+req = PUT url: URL_STRING, headers: HEADERS_HASH, basic_auth: BASIC_AUTH_HASH}
+
+# DELETE
+req = DELETE url: URL_STRING, headers: HEADERS_HASH, basic_auth: BASIC_AUTH_HASH
+```
+
+parammeters:
+
+* url (required):      String object.
+* headers (option):    Hash object of the headers.
+* basic_auth (option): Hash object of the basic authentication infomation. user_name and password keys are required.
+
+
 ## Contributing
 
 1. Fork it ( https://github.com/taiyuf/ruby_utils/fork )
