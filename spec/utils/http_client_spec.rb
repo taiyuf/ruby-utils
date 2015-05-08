@@ -21,9 +21,9 @@ RSpec.describe Utils::HttpClient do
 
     describe '.check_arguments' do
       context 'fail' do
-        it 'no params' do
-          expect{Utils::HttpClient.send('check_arguments', { foo: 1 })}.to raise_error RuntimeError, '*** Utils::HttpClient: params property is required!'
-        end
+        # it 'no params' do
+        #   expect{Utils::HttpClient.send('check_arguments', { foo: 1 })}.to raise_error RuntimeError, '*** Utils::HttpClient: params property is required!'
+        # end
 
         it 'not hash' do
           expect{Utils::HttpClient.send('check_arguments', { params: 1 })}.to raise_error RuntimeError, '*** Utils::HttpClient: params should be Hash!'

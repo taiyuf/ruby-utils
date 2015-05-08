@@ -41,7 +41,8 @@ module Utils
     #
     # @example
     #
-    # req = GET url: URL_STRING, headers: HEADERS_HASH, basic_auth: BASIC_AUTH_HASH
+    # res = GET url: URL_STRING, headers: HEADERS_HASH, basic_auth: BASIC_AUTH_HASH
+    # puts res.body
     #
     def GET(hash)
       check_arguments(hash)
@@ -57,7 +58,8 @@ module Utils
     #
     # @example
     #
-    # req = POST url: URL_STRING, headers: HEADERS_HASH, basic_auth: BASIC_AUTH_HASH
+    # res = POST url: URL_STRING, headers: HEADERS_HASH, basic_auth: BASIC_AUTH_HASH
+    # puts res.body
     #
     def POST(hash)
       check_arguments(hash)
@@ -73,7 +75,8 @@ module Utils
     #
     # @example
     #
-    # req = PUT url: URL_STRING, headers: HEADERS_HASH, basic_auth: BASIC_AUTH_HASH}
+    # res = PUT url: URL_STRING, headers: HEADERS_HASH, basic_auth: BASIC_AUTH_HASH}
+    # puts res.body
     #
     def PUT(hash)
       check_arguments(hash)
@@ -89,7 +92,8 @@ module Utils
     #
     # @example
     #
-    # req = DELETE url: URL_STRING, headers: HEADERS_HASH, basic_auth: BASIC_AUTH_HASH
+    # res = DELETE url: URL_STRING, headers: HEADERS_HASH, basic_auth: BASIC_AUTH_HASH
+    # puts res.body
     #
     def DELETE(hash)
       check_arguments(hash)
@@ -108,10 +112,11 @@ module Utils
     # 引数のHashの内容をチェックし、問題がなければ true を、問題があれば raise する
     #
     def check_arguments(hash)
-      raise "#{LOG_PREFIX} params property is required!" unless hash.has_key? :params
-      raise "#{LOG_PREFIX} params should be Hash!"       unless hash[:params].class.to_s == 'Hash'
+      if hash.has_key? :params
+        raise "#{LOG_PREFIX} params should be Hash!" unless hash[:params].class.to_s == 'Hash'
+      end
 
-      raise "#{LOG_PREFIX} url property is required!"    unless hash.has_key? :url
+      raise "#{LOG_PREFIX} url property is required!" unless hash.has_key? :url
 
       if hash.has_key? :basic_auth
         raise "#{LOG_PREFIX} basic_auth property should have the keys user_name and password." unless hash[:basic_auth].has_key? :user_name and hash[:basic_auth].has_key? :password
@@ -168,17 +173,21 @@ module Utils
     def make_request(type, uri, params=nil, headers=nil, basic_auth=nil)
 
       if type.to_s == 'get'
-        url = "#{uri[:path]}?#{Rack::Utils.build_query(params)}"
-        req = Net::HTTP::Get.new url
+        url = params.nil? ?
+          "#{uri[:url]}" :
+          "#{uri[:url]}?#{Rack::Utils.build_query(params)}"
+        req = Net::HTTP::Get.new URI(url)
       elsif type.to_s == 'post'
-        req = Net::HTTP::Post.new   uri[:path]
+        req = Net::HTTP::Post.new   uri[:url]
         req.set_form_data params if params
       elsif type.to_s == 'put'
-        req = Net::HTTP::Put.new    uri[:path]
+        req = Net::HTTP::Put.new    uri[:url]
         req.set_form_data params if params
       elsif type.to_s == 'delete'
-        url = "#{uri[:path]}?#{Rack::Utils.build_query(params)}"
-        req = Net::HTTP::Delete.new url
+        url = params.nil? ?
+          "#{uri[:url]}" :
+          "#{uri[:url]}?#{Rack::Utils.build_query(params)}"
+        req = Net::HTTP::Delete.new URI(url)
       else
         raise "Unknown type: #{type}."
       end
