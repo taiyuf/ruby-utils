@@ -195,7 +195,8 @@ module Utils
       # API認証
       if headers
         headers.each do |k, v|
-          req[k] = v
+          key      = k.class.to_s == 'Symbol' ? k.to_s : k
+          req[key] = v
         end
       end
 
