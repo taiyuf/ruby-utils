@@ -21,6 +21,7 @@
 # set the hash. keys are: 
 #
 # * url (required):      String object.
+# * params (option):     Hash object of the parameters.
 # * headers (option):    Hash object of the headers.
 # * basic_auth (option): Hash object of the basic authentication infomation. user_name and password keys are required.
 #
@@ -41,7 +42,7 @@ module Utils
     #
     # @example
     #
-    # res = GET url: URL_STRING, headers: HEADERS_HASH, basic_auth: BASIC_AUTH_HASH
+    # res = GET url: URL_STRING, params: PARAMS_HASH, headers: HEADERS_HASH, basic_auth: BASIC_AUTH_HASH
     # puts res.body
     #
     def GET(hash)
@@ -58,7 +59,7 @@ module Utils
     #
     # @example
     #
-    # res = POST url: URL_STRING, headers: HEADERS_HASH, basic_auth: BASIC_AUTH_HASH
+    # res = POST url: URL_STRING, params: PARAMS_HASH, headers: HEADERS_HASH, basic_auth: BASIC_AUTH_HASH
     # puts res.body
     #
     def POST(hash)
@@ -75,7 +76,7 @@ module Utils
     #
     # @example
     #
-    # res = PUT url: URL_STRING, headers: HEADERS_HASH, basic_auth: BASIC_AUTH_HASH}
+    # res = PUT url: URL_STRING, params: PARAMS_HASH, headers: HEADERS_HASH, basic_auth: BASIC_AUTH_HASH}
     # puts res.body
     #
     def PUT(hash)
@@ -92,7 +93,7 @@ module Utils
     #
     # @example
     #
-    # res = DELETE url: URL_STRING, headers: HEADERS_HASH, basic_auth: BASIC_AUTH_HASH
+    # res = DELETE url: URL_STRING, params: PARAMS_HASH, headers: HEADERS_HASH, basic_auth: BASIC_AUTH_HASH
     # puts res.body
     #
     def DELETE(hash)

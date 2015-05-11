@@ -66,16 +66,16 @@ require 'utils/http_client'
 include HttpClient
 
 # GET
-res = GET url: URL_STRING, headers: HEADERS_HASH, basic_auth: BASIC_AUTH_HASH
+res = GET url: URL_STRING, params: PARAMS_HASH, headers: HEADERS_HASH, basic_auth: BASIC_AUTH_HASH
 
 # POST
-res = POST url: URL_STRING, headers: HEADERS_HASH, basic_auth: BASIC_AUTH_HASH
+res = POST url: URL_STRING, params: PARAMS_HASH, headers: HEADERS_HASH, basic_auth: BASIC_AUTH_HASH
 
 # PUT
-res = PUT url: URL_STRING, headers: HEADERS_HASH, basic_auth: BASIC_AUTH_HASH
+res = PUT url: URL_STRING, params: PARAMS_HASH, headers: HEADERS_HASH, basic_auth: BASIC_AUTH_HASH
 
 # DELETE
-res = DELETE url: URL_STRING, headers: HEADERS_HASH, basic_auth: BASIC_AUTH_HASH
+res = DELETE url: URL_STRING, params: PARAMS_HASH, headers: HEADERS_HASH, basic_auth: BASIC_AUTH_HASH
 
 puts res.body
 ```
@@ -83,6 +83,7 @@ puts res.body
 parammeters:
 
 * url (required):      String object.
+* params (option):     Hash object of the parameters.
 * headers (option):    Hash object of the headers.
 * basic_auth (option): Hash object of the basic authentication infomation. user_name and password keys are required.
 
