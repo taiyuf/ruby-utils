@@ -49,7 +49,7 @@ module Utils
       check_arguments(hash)
       uri = parse_uri hash[:url]
       req = make_request 'get', uri, hash[:params], hash[:headers], hash[:basic_auth]
-      Net::HTTP.new(uri[:host], uri[:port]).start do |http| http.request req end
+      send_request uri, req
     end
 
     #===
@@ -66,7 +66,7 @@ module Utils
       check_arguments(hash)
       uri = parse_uri hash[:url]
       req = make_request 'post', uri, hash[:params], hash[:headers], hash[:basic_auth]
-      Net::HTTP.new(uri[:host], uri[:port]).start do |http| http.request req end
+      send_request uri, req
     end
 
     #===
@@ -83,7 +83,7 @@ module Utils
       check_arguments(hash)
       uri = parse_uri hash[:url]
       req = make_request 'put', uri, hash[:params], hash[:headers], hash[:basic_auth]
-      Net::HTTP.new(uri[:host], uri[:port]).start do |http| http.request req end
+      send_request uri, req
     end
 
     #===
@@ -100,7 +100,7 @@ module Utils
       check_arguments(hash)
       uri = parse_uri hash[:url]
       req = make_request 'delete', uri, hash[:params], hash[:headers], hash[:basic_auth]
-      Net::HTTP.new(uri[:host], uri[:port]).start do |http| http.request req end
+      send_request uri, req
     end
 
     private
@@ -113,10 +113,6 @@ module Utils
     # 引数のHashの内容をチェックし、問題がなければ true を、問題があれば raise する
     #
     def check_arguments(hash)
-      if hash.has_key? :params
-        raise "#{LOG_PREFIX} params should be Hash!" unless hash[:params].class.to_s == 'Hash'
-      end
-
       raise "#{LOG_PREFIX} url property is required!" unless hash.has_key? :url
 
       if hash.has_key? :basic_auth
@@ -177,18 +173,18 @@ module Utils
         url = params.nil? ?
           "#{uri[:url]}" :
           "#{uri[:url]}?#{Rack::Utils.build_query(params)}"
-        req = Net::HTTP::Get.new URI(url)
+        req = Net::HTTP::Get.new URI(url), 'Accept-Encoding' => 'identity'
       elsif type.to_s == 'post'
-        req = Net::HTTP::Post.new   uri[:url]
+        req = Net::HTTP::Post.new uri[:url], 'Accept-Encoding' => 'identity'
         req.set_form_data params if params
       elsif type.to_s == 'put'
-        req = Net::HTTP::Put.new    uri[:url]
+        req = Net::HTTP::Put.new uri[:url], 'Accept-Encoding' => 'identity'
         req.set_form_data params if params
       elsif type.to_s == 'delete'
         url = params.nil? ?
           "#{uri[:url]}" :
           "#{uri[:url]}?#{Rack::Utils.build_query(params)}"
-        req = Net::HTTP::Delete.new URI(url)
+        req = Net::HTTP::Delete.new URI(url), 'Accept-Encoding' => 'identity'
       else
         raise "Unknown type: #{type}."
       end
@@ -206,6 +202,15 @@ module Utils
       end
 
       req
+    end
+
+    def send_request(uri, req)
+      http = Net::HTTP.new uri[:host], uri[:port]
+      if uri[:scheme].to_s == 'https'
+        http.use_ssl     = true
+        http.verify_mode = OpenSSL::SSL::VERIFY_NONE
+      end
+      http.start do |h| h.request req end
     end
 
   end

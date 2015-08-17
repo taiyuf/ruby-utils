@@ -24,4 +24,5 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency "hashie"
   spec.add_development_dependency "rack"
   spec.add_development_dependency "webmock"
+  spec.add_development_dependency "minitest"
 end
