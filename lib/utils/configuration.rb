@@ -58,14 +58,19 @@ module Utils
     # @example
     #
     # config = get_config
-    # hoge   = config['hoge']
+    #  or
+    # config = get_config(env)
     #
-    def get_config
+    # hoge   = config[:hoge]
+    #
+    def get_config(env=nil)
 
       _init = Proc.new do
         common = read_yaml 'config/config_common.yml'
         secret = read_yaml 'config/config_secret.yml'
-        env    = ENV['RAILS_ENV'] ? ENV['RAILS_ENV'] : 'development'
+        if env.nil?
+          env  = ENV['RAILS_ENV'] ? ENV['RAILS_ENV'] : 'development'
+        end
 
         if secret
           if secret.has_key?(env.to_sym)
@@ -108,8 +113,8 @@ module Utils
     #
     # @example
     #
-    # hash = read_yaml('path/to/yaml')
-    # hoge = hash['hoge']
+    # hash = read_yaml File.expand_path('path/to/yaml', __FILE__)
+    # hoge = hash[:hoge]
     #
     def read_yaml(file)
       log        = Logger.new(STDOUT)
