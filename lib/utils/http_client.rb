@@ -113,6 +113,10 @@ module Utils
     # 引数のHashの内容をチェックし、問題がなければ true を、問題があれば raise する
     #
     def check_arguments(hash)
+      if hash.has_key? :params
+        raise "#{LOG_PREFIX} params should be Hash!" unless hash[:params].class.to_s == 'Hash'
+      end
+
       raise "#{LOG_PREFIX} url property is required!" unless hash.has_key? :url
 
       if hash.has_key? :basic_auth
