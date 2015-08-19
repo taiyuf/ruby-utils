@@ -22,6 +22,10 @@ RSpec.describe Utils::HttpClient do
     describe '.check_arguments' do
       context 'fail' do
 
+        it 'not hash' do
+          expect{Utils::HttpClient.send('check_arguments', { params: 1 })}.to raise_error RuntimeError, '*** Utils::HttpClient: params should be Hash!'
+        end
+
         it 'should have basic_auth[:user_name]' do
           expect{Utils::HttpClient.send('check_arguments', { params: { foo: 1 }, url: 'hoge', basic_auth: { password: 1} } )}.to raise_error RuntimeError, '*** Utils::HttpClient: basic_auth property should have the keys user_name and password.'
         end
