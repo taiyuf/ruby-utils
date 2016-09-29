@@ -141,7 +141,7 @@ module Utils
 
     def symbolize(hash)
       begin
-        require 'active_support'
+        require 'active_support/core_ext/hash/keys'
       rescue LoadError
 
         begin
